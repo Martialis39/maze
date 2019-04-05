@@ -7,10 +7,10 @@ class Maze extends React.Component {
     super(props);
     this.state = {
       maze: [
-        [0, 0, 0, 0, 0],
         [0, 1, 0, 0, 0],
-        [0, 1, 0, 0, 0],
-        [2, 1, 1, 1, 3],
+        [0, 1, 1, 1, 0],
+        [0, 1, 0, 1, 0],
+        [2, 1, 0, 1, 3],
         [0, 0, 0, 0, 0]
       ],
       mazeAsObject: null
@@ -88,19 +88,19 @@ class Maze extends React.Component {
 
       if (finish.length === 1) {
         path.push(finish[0]);
-
         this.pathArray[currentIndex] = [];
         this.pathArray[currentIndex].push(path);
         return;
       }
     }
     validMoves.forEach(validMove => {
+      let newPath = path;
       currentIndex++;
-      path.push(validMove);
+      newPath.push(validMove);
       visited.push(validMove.id);
       this.checkNeighbours(
         this.getNeighbours(validMove.x, validMove.y),
-        path,
+        newPath,
         visited,
         currentIndex
       );
@@ -133,10 +133,21 @@ class Maze extends React.Component {
   render() {
     let maze = this.state.maze.map((row, columnIndex) => {
       return row.map((cell, rowIndex) => {
-        return <Cell value={cell} x={rowIndex} y={columnIndex} />;
+        return <Cell value = {
+          cell
+        }
+        x = {
+          rowIndex
+        }
+        y = {
+          columnIndex
+        }
+        />;
       });
     });
-    return <div className="maze"> {maze} </div>;
+    return <div className = "maze" > {
+      maze
+    } < /div>;
   }
 }
 
