@@ -34,7 +34,6 @@
 }
 
 .maze {
-  max-width: 500px;
   display: flex;
   flex-wrap: wrap;
   margin: 0 auto;
@@ -54,4 +53,8 @@
 
 .path {
   background: whitesmoke;
+}
+
+.true {
+  background: hotpink;
 }

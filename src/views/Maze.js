@@ -6,16 +6,23 @@ class Maze extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      maze: [
-        [0, 1, 0, 0, 0],
-        [0, 1, 1, 1, 0],
-        [0, 1, 0, 1, 0],
-        [2, 1, 0, 1, 3],
-        [0, 0, 0, 0, 0]
+      maze: 
+      [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+        [0, 0, 0, 0, 0, 0, 1, 1, 1, 3], 
+        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], 
+        [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], 
+        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0], 
+        [2, 1, 1, 1, 1, 1, 1, 0, 0, 0], 
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       ],
       mazeAsObject: null
     };
     this.maze = [];
+    this.bestPath = []
     this.constructMaze = this.constructMaze.bind(this);
     this.initSolve = this.initSolve.bind(this);
     this.checkNeighbours = this.checkNeighbours.bind(this);
@@ -25,36 +32,42 @@ class Maze extends React.Component {
 
   initSolve() {
     let maze = this.maze;
-    let start = [];
+    let start = null;
     let paths = [];
     let visited = [];
-    let current = null;
-
-    maze.forEach(row => {
-      row.forEach(cell => {
+    maze.forEach((row) => {
+      row.forEach((cell) => {
         // Is start?
-        if ((start.length == 0) & (cell.state == 2)) {
-          start.push(cell);
+        if ((start === null) & (cell.state == 2)) {
+          start = cell;
           paths.push(cell);
           visited.push(cell.id);
-          current = cell;
         }
       });
     });
+    console.log({ start });
     this.checkNeighbours(
-      this.getNeighbours(current.x, current.y),
+      this.getNeighbours(start.x, start.y),
       paths,
       visited,
       0
     );
-    console.log("test", this.pathArray);
+    console.log("Result", this.pathArray);
+    // Get path that ends with exit
+    this.pathArray.forEach((path) => {
+      if(path[path.length - 1].state == 3){
+        this.bestPath = path
+      }
+    })
+
+
   }
 
   getNeighbours(x, y) {
     let maze = this.maze;
     let neighbours = [];
-    maze.forEach(row => {
-      row.forEach(cell => {
+    maze.forEach((row) => {
+      row.forEach((cell) => {
         if (
           (cell.x == x && cell.y == y + 1) ||
           (cell.x == x && cell.y == y - 1) ||
@@ -71,30 +84,28 @@ class Maze extends React.Component {
 
   checkNeighbours(neighbours, path, visited, currentIndex) {
     let validMoves = [];
-    neighbours.forEach(potentialMove => {
+    neighbours.forEach((potentialMove) => {
       if (visited.indexOf(potentialMove.id) < 0) {
         if (potentialMove.state !== 0) {
           validMoves.push(potentialMove);
         }
       }
     });
-
     if (validMoves.length === 0) {
-      this.pathArray = [];
+      
       this.pathArray[currentIndex] = path;
       return;
     } else {
-      let finish = validMoves.filter(cell => cell.state === 3);
-
+      let finish = validMoves.filter((cell) => cell.state === 3);
       if (finish.length === 1) {
         path.push(finish[0]);
-        this.pathArray[currentIndex] = [];
-        this.pathArray[currentIndex].push(path);
+        
+        this.pathArray[currentIndex] = path;
         return;
       }
     }
-    validMoves.forEach(validMove => {
-      let newPath = path;
+    validMoves.forEach((validMove) => {
+      let newPath = JSON.parse(JSON.stringify(path));
       currentIndex++;
       newPath.push(validMove);
       visited.push(validMove.id);
@@ -108,9 +119,10 @@ class Maze extends React.Component {
   }
 
   constructMaze() {
-    for (let i = 0; i < 5; i++) {
+    let gridSize = this.state.maze[0].length;
+    for (let i = 0; i < gridSize; i++) {
       this.maze[i] = [];
-      for (let j = 0; j < 5; j++) {
+      for (let j = 0; j < gridSize; j++) {
         const Cell = {
           x: j,
           y: i,
@@ -123,7 +135,6 @@ class Maze extends React.Component {
     this.setState({
       mazeAsObject: this.maze
     });
-    console.table(this.maze);
   }
   componentDidMount() {
     this.constructMaze();
@@ -131,23 +142,24 @@ class Maze extends React.Component {
   }
 
   render() {
-    let maze = this.state.maze.map((row, columnIndex) => {
+    let style = {
+      width: `${this.state.maze[0].length * 100}px`
+    };
+    let parsedBestPath = this.bestPath.map( (cell) => cell.id )
+    console.log('this.bestPath', parsedBestPath)
+    let maze = this.maze.map((row, columnIndex) => {
       return row.map((cell, rowIndex) => {
-        return <Cell value = {
-          cell
-        }
-        x = {
-          rowIndex
-        }
-        y = {
-          columnIndex
-        }
-        />;
+        const isActive = parsedBestPath.indexOf(cell.id) < 0 ? false : true
+        return (
+          <Cell key={uniqueId()} index={cell.id} active={isActive} value={cell.state} x={rowIndex} y={columnIndex} />
+        );
       });
     });
-    return <div className = "maze" > {
-      maze
-    } < /div>;
+    return (
+      <div style={style} className="maze">
+        {maze}
+      </div>
+    );
   }
 }
 

@@ -11,11 +11,12 @@ class Cell extends React.Component {
   render() {
     let baseClass = "cell";
     let stateClass = this.value == 0 ? "wall" : "path";
-    let cellClasses = `${baseClass} ${stateClass}`;
+    let trueClass = this.props.active ? 'true' : ''
+    let cellClasses = `${baseClass} ${stateClass} ${trueClass}`;
     return (
       <div className={cellClasses}>
         <h1>
-          {this.x}, {this.y}
+          {this.props.index}
         </h1>
       </div>
     );
