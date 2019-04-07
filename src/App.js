@@ -4,6 +4,7 @@ import Home from "./views/Home";
 import About from "./views/About";
 import Portfolio from "./views/Portoflio";
 import Maze from "./views/Maze";
+import CreateMaze from "./views/CreateMaze";
 import "./App.css";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route path="/about" component={About} />{" "}
         <Route path="/portfolio" component={Portfolio} />{" "}
         <Route path="/maze" component={Maze} />{" "}
+        <Route path="/create" component={CreateMaze} />{" "}
       </div>{" "}
     </Router>
   );

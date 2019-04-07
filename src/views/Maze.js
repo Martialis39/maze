@@ -6,24 +6,39 @@ class Maze extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      maze: 
-      [
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-        [0, 0, 0, 0, 0, 0, 1, 1, 1, 3], 
-        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
-        [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], 
-        [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], 
-        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0], 
-        [2, 1, 1, 1, 1, 1, 1, 0, 0, 0], 
+      maze: this.props.maze || [
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 1, 1, 3],
+        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+        [2, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       ],
-      mazeAsObject: null
+      solved: false,
+
+      mazeAsObject: Array(this.props.maze[0].length)
+        .fill(null)
+        .map((row, rowIndex) => {
+          return Array(this.props.maze[0].length)
+            .fill(null)
+            .map((cell, colIndex) => {
+              const cell_object = {
+                x: colIndex,
+                y: rowIndex,
+                state: this.props.maze[rowIndex][colIndex],
+                id: uniqueId()
+              };
+              cell = cell_object;
+              return cell;
+            });
+        })
     };
-    this.maze = [];
-    this.bestPath = []
-    this.constructMaze = this.constructMaze.bind(this);
+
+    this.bestPath = [];
     this.initSolve = this.initSolve.bind(this);
     this.checkNeighbours = this.checkNeighbours.bind(this);
     this.getNeighbours = this.getNeighbours.bind(this);
@@ -31,7 +46,7 @@ class Maze extends React.Component {
   }
 
   initSolve() {
-    let maze = this.maze;
+    let maze = JSON.parse(JSON.stringify(this.state.mazeAsObject));
     let start = null;
     let paths = [];
     let visited = [];
@@ -45,26 +60,27 @@ class Maze extends React.Component {
         }
       });
     });
-    console.log({ start });
     this.checkNeighbours(
       this.getNeighbours(start.x, start.y),
       paths,
       visited,
       0
     );
+    const solved = true;
+    this.setState({
+      solved
+    });
     console.log("Result", this.pathArray);
     // Get path that ends with exit
     this.pathArray.forEach((path) => {
-      if(path[path.length - 1].state == 3){
-        this.bestPath = path
+      if (path[path.length - 1].state == 3) {
+        this.bestPath = path;
       }
-    })
-
-
+    });
   }
 
   getNeighbours(x, y) {
-    let maze = this.maze;
+    let maze = this.state.mazeAsObject;
     let neighbours = [];
     maze.forEach((row) => {
       row.forEach((cell) => {
@@ -92,14 +108,12 @@ class Maze extends React.Component {
       }
     });
     if (validMoves.length === 0) {
-      
       this.pathArray[currentIndex] = path;
       return;
     } else {
       let finish = validMoves.filter((cell) => cell.state === 3);
       if (finish.length === 1) {
         path.push(finish[0]);
-        
         this.pathArray[currentIndex] = path;
         return;
       }
@@ -118,48 +132,44 @@ class Maze extends React.Component {
     });
   }
 
-  constructMaze() {
-    let gridSize = this.state.maze[0].length;
-    for (let i = 0; i < gridSize; i++) {
-      this.maze[i] = [];
-      for (let j = 0; j < gridSize; j++) {
-        const Cell = {
-          x: j,
-          y: i,
-          state: this.state.maze[i][j],
-          id: uniqueId()
-        };
-        this.maze[i].push(Cell);
-      }
-    }
-    this.setState({
-      mazeAsObject: this.maze
-    });
-  }
   componentDidMount() {
-    this.constructMaze();
     this.initSolve();
   }
 
   render() {
-    let style = {
-      width: `${this.state.maze[0].length * 100}px`
-    };
-    let parsedBestPath = this.bestPath.map( (cell) => cell.id )
-    console.log('this.bestPath', parsedBestPath)
-    let maze = this.maze.map((row, columnIndex) => {
-      return row.map((cell, rowIndex) => {
-        const isActive = parsedBestPath.indexOf(cell.id) < 0 ? false : true
+    if (this.state.solved) {
+      let width = this.props.width
+        ? this.props.width
+        : this.state.maze[0].length * 100;
+      let style = {
+        width: `${width}px`
+      };
+      let parsedBestPath = this.bestPath.map((cell) => cell.id);
+      if (this.state.mazeAsObject) {
+        let maze = this.state.mazeAsObject.map((row, columnIndex) => {
+          return row.map((cell, rowIndex) => {
+            const isActive = parsedBestPath.indexOf(cell.id) < 0 ? false : true;
+            return (
+              <Cell
+                key={uniqueId()}
+                index={cell.id}
+                active={isActive}
+                value={cell.state}
+                x={rowIndex}
+                y={columnIndex}
+              />
+            );
+          });
+        });
         return (
-          <Cell key={uniqueId()} index={cell.id} active={isActive} value={cell.state} x={rowIndex} y={columnIndex} />
+          <div style={style} className="maze">
+            {maze}
+          </div>
         );
-      });
-    });
-    return (
-      <div style={style} className="maze">
-        {maze}
-      </div>
-    );
+      }
+    } else {
+      return null;
+    }
   }
 }
 
