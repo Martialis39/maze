@@ -1,6 +1,6 @@
 import React from "react";
 import { Redirect, Link } from "react-router-dom";
-
+import CreateMaze from "./CreateMaze";
 class Home extends React.Component {
   constructor() {
     super();
@@ -9,7 +9,8 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        <h1> Home </h1>{" "}
+        <CreateMaze />
+        {/* <h1> Home </h1>{" "}
         <h2>
           <Link to="/about"> About </Link>{" "}
         </h2>{" "}
@@ -21,7 +22,7 @@ class Home extends React.Component {
         </h2>{" "}
         <h2>
           <Link to="/create"> Create </Link>{" "}
-        </h2>{" "}
+        </h2>{" "} */}
       </div>
     );
   }

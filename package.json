@@ -2,9 +2,10 @@
   "name": "portfolio",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://martialis39.github.io/maze",
+  "homepage": "https://node.martpart.ee/",
   "dependencies": {
     "lodash.uniqueid": "^4.0.1",
+    "puppeteer": "^1.14.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-redux": "^6.0.1",
