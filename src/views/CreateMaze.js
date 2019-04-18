@@ -169,6 +169,7 @@ class CreateMaze extends React.Component {
         return (
           <div>
             <h1>Create Maze</h1>
+            <h3>This is only a test</h3>
             <p>Create the maze</p>
             <div className="c-form">
               <label>
