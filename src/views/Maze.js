@@ -144,6 +144,7 @@ class Maze extends React.Component {
       let style = {
         width: `${width}px`
       };
+      debugger;
       let parsedBestPath = this.bestPath.map((cell) => cell.id);
       if (this.state.mazeAsObject) {
         let maze = this.state.mazeAsObject.map((row, columnIndex) => {
