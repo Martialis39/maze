@@ -43,22 +43,36 @@
 .cell {
   box-sizing: border-box;
   margin: 1px;
-  height: 50px;
+  height: calc(50px - 2px);
   width: calc(50px - 2px);
-  background-color: rgba(0, 44, 168, 0.6);
+
+  background-color: #464646;
+
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.cell h1 {
+.cell p {
   font-size: 10px;
 }
 
 .path {
-  background: whitesmoke;
+  background-color: #a1a1a1;
 }
 
 .true {
-  background: hotpink;
+  background: #66cc91;
+}
+
+.maze-container {
+  display: flex;
+  max-width: 800px;
+  padding: 20px;
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+.maze-container > * {
+  margin: 0 10px;
 }

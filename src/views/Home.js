@@ -1,15 +1,17 @@
 import React from "react";
 import { Redirect, Link } from "react-router-dom";
 import CreateMaze from "./CreateMaze";
-class Home extends React.Component {
-  constructor() {
-    super();
-  }
+import ShowMaze from "./components/ShowMaze";
 
+import { data } from "../data";
+class Home extends React.Component {
   render() {
     return (
-      <div>
-        <CreateMaze />
+      <div className="maze-container">
+        {data.map((maze) => (
+          <ShowMaze maze={maze} />
+        ))}
+        {/* <ShowMaze maze={smallMaze} /> */}
         {/* <h1> Home </h1>{" "}
         <h2>
           <Link to="/about"> About </Link>{" "}

@@ -6,25 +6,13 @@ class Maze extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      maze: this.props.maze || [
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 1, 1, 1, 3],
-        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
-        [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
-        [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
-        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-        [2, 1, 1, 1, 1, 1, 1, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-      ],
+      // && this.props.maze,
       solved: false,
-
       mazeAsObject: Array(this.props.maze[0].length)
         .fill(null)
         .map((row, rowIndex) => {
           return Array(this.props.maze[0].length)
-            .fill(null)
+            .fill("empty cell")
             .map((cell, colIndex) => {
               const cell_object = {
                 x: colIndex,
@@ -32,8 +20,7 @@ class Maze extends React.Component {
                 state: this.props.maze[rowIndex][colIndex],
                 id: uniqueId()
               };
-              cell = cell_object;
-              return cell;
+              return cell_object;
             });
         })
     };
@@ -138,13 +125,11 @@ class Maze extends React.Component {
 
   render() {
     if (this.state.solved) {
-      let width = this.props.width
-        ? this.props.width
-        : this.state.maze[0].length * 100;
+      let width = (this.props.maze[0].length * 100) / 2;
       let style = {
         width: `${width}px`
       };
-      debugger;
+
       let parsedBestPath = this.bestPath.map((cell) => cell.id);
       if (this.state.mazeAsObject) {
         let maze = this.state.mazeAsObject.map((row, columnIndex) => {

@@ -20,17 +20,28 @@ class Cell extends React.Component {
   };
 
   render() {
+    console.log(this.props.mazeHeight / this.props.numberOfCellsInRow);
     let baseClass = "cell";
     let stateClass = this.value == 0 ? "wall" : "path";
     let trueClass = this.props.active ? "true" : "";
     let cellClasses = `${baseClass} ${stateClass} ${trueClass}`;
+    let style = null;
+    if (this.props.numberOfCellsInRow) {
+      console.log(`calc(100% / ${this.props.numberOfCellsInRow} - 2px)`);
+      style = {
+        width: `calc(100% / ${this.props.numberOfCellsInRow} - 2px)`,
+        height: `calc(${this.props.mazeHeight /
+          this.props.numberOfCellsInRow}px - 2px)`
+      };
+    }
     return (
       <div
+        style={style}
         className={cellClasses}
         onClick={this.handleClick}
         onMouseOver={this.handleHover}
       >
-        <h1>{this.props.index}</h1>
+        <p>{this.props.index}</p>
       </div>
     );
   }
