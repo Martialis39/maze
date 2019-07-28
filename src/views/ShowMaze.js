@@ -1,5 +1,5 @@
 import React from "react";
-import Cell from "./Cell";
+import Cell from "./components/Cell";
 
 class ShowMaze extends React.Component {
   constructor(props) {
@@ -32,13 +32,18 @@ class ShowMaze extends React.Component {
   handleClick() {}
 
   render() {
-    let width = (this.props.maze[0].length * 100) / 2;
     let style = {
       width: `${this.mazeHeight}px`,
       height: `${this.mazeHeight}px`
     };
     return (
-      <div style={style} className="maze">
+      <div
+        onClick={() => {
+          this.props.handleClick(this.props.maze);
+        }}
+        style={style}
+        className="maze"
+      >
         {this.maze}
       </div>
     );

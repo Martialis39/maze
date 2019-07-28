@@ -2,7 +2,7 @@
   "name": "portfolio",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://node.martpart.ee/",
+  "homepage": "https://maze-soup-armenian.heroku.com/",
   "dependencies": {
     "lodash.uniqueid": "^4.0.1",
     "react": "^16.8.6",

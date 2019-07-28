@@ -6,7 +6,6 @@ class Maze extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // && this.props.maze,
       solved: false,
       mazeAsObject: Array(this.props.maze[0].length)
         .fill(null)
@@ -37,10 +36,10 @@ class Maze extends React.Component {
     let start = null;
     let paths = [];
     let visited = [];
-    maze.forEach((row) => {
-      row.forEach((cell) => {
+    maze.forEach(row => {
+      row.forEach(cell => {
         // Is start?
-        if ((start === null) & (cell.state == 2)) {
+        if ((start === null) & (cell.state === 2)) {
           start = cell;
           paths.push(cell);
           visited.push(cell.id);
@@ -59,8 +58,8 @@ class Maze extends React.Component {
     });
     console.log("Result", this.pathArray);
     // Get path that ends with exit
-    this.pathArray.forEach((path) => {
-      if (path[path.length - 1].state == 3) {
+    this.pathArray.forEach(path => {
+      if (path[path.length - 1].state === 3) {
         this.bestPath = path;
       }
     });
@@ -69,13 +68,13 @@ class Maze extends React.Component {
   getNeighbours(x, y) {
     let maze = this.state.mazeAsObject;
     let neighbours = [];
-    maze.forEach((row) => {
-      row.forEach((cell) => {
+    maze.forEach(row => {
+      row.forEach(cell => {
         if (
-          (cell.x == x && cell.y == y + 1) ||
-          (cell.x == x && cell.y == y - 1) ||
-          (cell.y == y && cell.x == x + 1) ||
-          (cell.y == y && cell.x == x - 1)
+          (cell.x === x && cell.y === y + 1) ||
+          (cell.x === x && cell.y === y - 1) ||
+          (cell.y === y && cell.x === x + 1) ||
+          (cell.y === y && cell.x === x - 1)
         ) {
           neighbours.push(cell);
         }
@@ -87,7 +86,7 @@ class Maze extends React.Component {
 
   checkNeighbours(neighbours, path, visited, currentIndex) {
     let validMoves = [];
-    neighbours.forEach((potentialMove) => {
+    neighbours.forEach(potentialMove => {
       if (visited.indexOf(potentialMove.id) < 0) {
         if (potentialMove.state !== 0) {
           validMoves.push(potentialMove);
@@ -98,14 +97,14 @@ class Maze extends React.Component {
       this.pathArray[currentIndex] = path;
       return;
     } else {
-      let finish = validMoves.filter((cell) => cell.state === 3);
+      let finish = validMoves.filter(cell => cell.state === 3);
       if (finish.length === 1) {
         path.push(finish[0]);
         this.pathArray[currentIndex] = path;
         return;
       }
     }
-    validMoves.forEach((validMove) => {
+    validMoves.forEach(validMove => {
       let newPath = JSON.parse(JSON.stringify(path));
       currentIndex++;
       newPath.push(validMove);
@@ -125,12 +124,13 @@ class Maze extends React.Component {
 
   render() {
     if (this.state.solved) {
-      let width = (this.props.maze[0].length * 100) / 2;
+      let width = (this.props.maze[0].length * 75) / 2;
       let style = {
-        width: `${width}px`
+        width: `${width}px`,
+        height: `${width}px`
       };
 
-      let parsedBestPath = this.bestPath.map((cell) => cell.id);
+      let parsedBestPath = this.bestPath.map(cell => cell.id);
       if (this.state.mazeAsObject) {
         let maze = this.state.mazeAsObject.map((row, columnIndex) => {
           return row.map((cell, rowIndex) => {
@@ -143,6 +143,7 @@ class Maze extends React.Component {
                 value={cell.state}
                 x={rowIndex}
                 y={columnIndex}
+                numberOfCellsInRow={this.props.maze[0].length}
               />
             );
           });

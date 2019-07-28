@@ -1,14 +1,81 @@
-body {
+* {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+body {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAIUlEQVQYV2NkwAIYkcWu/nryX5tNhhG3IEgFTAeGSpgEAGGqDAZH2hjRAAAAAElFTkSuQmCC)
+    repeat;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+ul,
+ol {
+  margin: 20px;
+}
+
+.maze {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+
+.cell {
+  box-sizing: border-box;
+  margin: 1px;
+  background-color: #464646;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cell p {
+  font-size: 10px;
+}
+
+.path {
+  background-color: #a1a1a1;
+}
+
+.start {
+  background-color: rgb(245, 241, 12) !important;
+}
+
+.end {
+  background-color: hotpink !important;
+}
+
+.true {
+  background: #66cc91;
+}
+
+.about {
+  max-width: 668px;
+  margin: 0 auto;
+  padding: 10vh 20px 20px 20px;
+}
+
+.maze-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 100%;
+  padding: 40px;
+}
+
+.maze-container > * {
+  margin: 10px;
 }

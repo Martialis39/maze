@@ -22,16 +22,31 @@ class Cell extends React.Component {
   render() {
     console.log(this.props.mazeHeight / this.props.numberOfCellsInRow);
     let baseClass = "cell";
-    let stateClass = this.value == 0 ? "wall" : "path";
+
+    let stateClass = null
+    switch(this.value) {
+      case(0):
+        stateClass = "wall"
+        break
+      case(2):
+        stateClass = 'start'
+        break  
+      case(3):
+        stateClass = "end"
+        break
+      default:
+        stateClass= "path"
+        break
+    }
     let trueClass = this.props.active ? "true" : "";
     let cellClasses = `${baseClass} ${stateClass} ${trueClass}`;
     let style = null;
     if (this.props.numberOfCellsInRow) {
-      console.log(`calc(100% / ${this.props.numberOfCellsInRow} - 2px)`);
+      
       style = {
         width: `calc(100% / ${this.props.numberOfCellsInRow} - 2px)`,
-        height: `calc(${this.props.mazeHeight /
-          this.props.numberOfCellsInRow}px - 2px)`
+        height: `calc(100% / ${this.props.numberOfCellsInRow} - 2px)`,
+        
       };
     }
     return (
